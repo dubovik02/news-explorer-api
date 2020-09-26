@@ -4,12 +4,12 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
+const limiter = require('./middlewares/limiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
-const usersRouter = require('./routes/users.js');
-const articlesRouter = require('./routes/articles.js');
-const createUserRouter = require('./routes/signup.js');
-const loginRouter = require('./routes/signin.js');
+const {
+  usersRouter, articlesRouter, createUserRouter, loginRouter,
+} = require('./routes/index');
 const NotFoundError = require('./errors/NotFoundError');
 
 const castErrorName = 'CastError';
@@ -18,8 +18,9 @@ const validationErrName = 'ValidationError';
 const { PORT = 3000 } = process.env;
 const app = express();
 
-const { CONNECTION_STR = 'mongodb://localhost:27017/newsdb' } = process.env;
-// mongoose.connect('mongodb://localhost:27017/newsdb', {
+const { NODE_ENV = 'develop' } = process.env;
+const CONNECTION_STR = (NODE_ENV === 'production' ? process.env.CONNECTION_STR : 'mongodb://localhost:27017/newsdb');
+// const { CONNECTION_STR = 'mongodb://localhost:27017/newsdb' } = process.env;
 mongoose.connect(CONNECTION_STR, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -32,13 +33,9 @@ app.use(bodyParser.json());
 
 app.use(helmet());
 
-app.use(requestLogger);
+app.use(limiter);
 
-// app.get('/crash-test', () => {
-//   setTimeout(() => {
-//     throw new Error('Сервер сейчас упадёт');
-//   }, 0);
-// });
+app.use(requestLogger);
 
 app.use('/signup', createUserRouter);
 app.use('/signin', loginRouter);
