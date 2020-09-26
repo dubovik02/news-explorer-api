@@ -8,7 +8,7 @@ const limiter = require('./middlewares/limiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 const {
-  usersRouter, articlesRouter, createUserRouter, loginRouter,
+  createUserRouter, loginRouter, usersRouter, articlesRouter,
 } = require('./routes/index');
 const NotFoundError = require('./errors/NotFoundError');
 
