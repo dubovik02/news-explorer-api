@@ -15,5 +15,5 @@ A. Dubovik YPraktikum News explorer (backend)
 #### To run production version on localhost:3000 run:
     npm run start
 ### [Source code](https://github.com/dubovik02/news-explorer-api)
-### Test the API-server:
+### Test the API-server via Postman:
 <https://api.ne2020.tk>
