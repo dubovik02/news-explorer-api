@@ -1,7 +1,7 @@
 const Articles = require('../models/article');
-const ServerError = require('../errors/ServerError');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
+const errMsg = require('../config/messages');
 
 // Список статей
 module.exports.readArticles = (req, res, next) => {
@@ -9,18 +9,16 @@ module.exports.readArticles = (req, res, next) => {
     .then((articles) => {
       res.status(200).send(articles);
     })
-    .catch(() => {
-      next(new ServerError());
-    });
+    .catch(next);
 };
 // Создание статьи
 module.exports.createArticle = (req, res, next) => {
   const {
-    keyword, title, text, date, link, image,
+    keyword, title, text, source, date, link, image,
   } = req.body;
   const owner = req.user._id;
   Articles.create({
-    keyword, title, text, date, link, image, owner,
+    keyword, title, text, source, date, link, image, owner,
   })
     .then((article) => {
       res.status(200).send({ data: article });
@@ -32,7 +30,7 @@ module.exports.deleteArticleById = (req, res, next) => {
   Articles.findById(req.params.id).select('+owner')
     .then((article) => {
       if (!article) {
-        throw new NotFoundError(`Статья c ID ${req.params.id} не существует`);
+        throw new NotFoundError(errMsg.ERR_MESSAGE_ARTICLE_NOT_FOUND);
       } else if (article.owner.toString() === req.user._id) {
         Articles.findByIdAndDelete(article._id)
           .then((removedArticle) => {
@@ -40,7 +38,7 @@ module.exports.deleteArticleById = (req, res, next) => {
           })
           .catch(next);
       } else {
-        throw new ForbiddenError('Нет прав на удаление');
+        throw new ForbiddenError(errMsg.ERR_MESSAGE_FORBIDDEN);
       }
     })
     .catch(next);

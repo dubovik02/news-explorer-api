@@ -1,18 +1,17 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const UnauthorizedError = require('../errors/UnauthorizedError');
+const config = require('../config/config');
+const errMsg = require('../config/messages');
 
-const { NODE_ENV = 'develop' } = process.env;
-const JWT_SECRET = (NODE_ENV === 'production' ? process.env.JWT_SECRET : 'develop-key');
-// const { JWT_SECRET = 'develop-key' } = process.env;
+const { JWT_SECRET } = config;
 
 // Login
-// eslint-disable-next-line consistent-return
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    next(new UnauthorizedError('Не задан email или пароль'));
+    next(new UnauthorizedError(errMsg.ERR_MESSAGE_EMPTY_USER_DETAILS));
     return;
   }
 

@@ -2,11 +2,11 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
+const errMsg = require('../config/messages');
 
 const PASS_LENGTH = 8;
 
 // Создание
-// eslint-disable-next-line consistent-return
 module.exports.createUser = (req, res, next) => {
   const {
     name, email, password,
@@ -16,18 +16,17 @@ module.exports.createUser = (req, res, next) => {
     // если пароль не задан, пароль перед сохранением не захишируем -
     // создание не возможно.
     if (!password) {
-      throw new BadRequestError('Пароль не задан');
+      throw new BadRequestError(errMsg.ERR_MESSAGE_PASS_REQUIRE);
     }
 
     // пароль не может состоять из пробелов
     if (!password.split(' ').join('').length) {
-      throw new BadRequestError('Пароль не может состоять только из пробелов');
+      throw new BadRequestError(errMsg.ERR_MESSAGE_SPACES_ALLOW);
     }
 
     // проверка длины пароля
     if (password.length < PASS_LENGTH) {
-      // eslint-disable-next-line max-len
-      throw new BadRequestError(`Длина пароля должна быть не менее ${PASS_LENGTH} символов`);
+      throw new BadRequestError(errMsg.ERR_MESSAGE_PASS_LENGTH + PASS_LENGTH);
     }
   } catch (err) {
     next(err);
@@ -37,7 +36,7 @@ module.exports.createUser = (req, res, next) => {
   User.findUserByEmail(email)
     .then((user) => {
       if (user) {
-        throw new ConflictError('Пользователь с таким email уже существует');
+        throw new ConflictError(errMsg.ERR_MESSAGE_USER_EXISTS);
       } else {
         bcrypt.hash(password, 10)
           .then((hash) => User.create({

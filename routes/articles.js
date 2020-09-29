@@ -12,6 +12,7 @@ router.post('/', celebrate({
     keyword: Joi.string().required().min(2).max(30),
     title: Joi.string().required().min(2),
     text: Joi.string().required().min(2),
+    source: Joi.string().required().min(2),
     date: Joi.date().required(),
     link: Joi.string().required().custom(checkURL),
     image: Joi.string().required().custom(checkURL),
