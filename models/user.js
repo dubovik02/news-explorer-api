@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-const ServerError = require('../errors/ServerError');
+const errMsg = require('../config/messages');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -38,7 +38,7 @@ userSchema.statics.findUserByEmail = function findByEmail(email) {
       }
       return null;
     })
-    .catch(() => Promise.reject(new ServerError()));
+    .catch((err) => Promise.reject(err));
 };
 
 // Поиск пользователя по email и паролю
@@ -49,12 +49,12 @@ userSchema.statics.findUserByCredentials = function findByCredentials(email, pas
         return bcrypt.compare(password, user.password)
           .then((matched) => {
             if (!matched) {
-              return Promise.reject(new UnauthorizedError('Некорректные имя пользователя или пароль'));
+              return Promise.reject(new UnauthorizedError(errMsg.ERR_MESSAGE_INVALID_USER_DETAILS));
             }
             return user;
           });
       }
-      return Promise.reject(new UnauthorizedError('Некорректные имя пользователя или пароль'));
+      return Promise.reject(new UnauthorizedError(errMsg.ERR_MESSAGE_INVALID_USER_DETAILS));
     })
     .catch((err) => Promise.reject(err));
 };

@@ -1,17 +1,17 @@
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/UnauthorizedError');
+const config = require('../config/config');
+const errMsg = require('../config/messages');
 
-const { NODE_ENV = 'develop' } = process.env;
-const JWT_SECRET = (NODE_ENV === 'production' ? process.env.JWT_SECRET : 'develop-key');
-// const { JWT_SECRET = 'develop-key' } = process.env;
+const { JWT_SECRET } = config;
 
-// eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  const error = new UnauthorizedError('Некорректный ключ для авторизации');
+  const error = new UnauthorizedError(errMsg.ERR_MESSAGE_AUTH_REQUIRE);
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     next(error);
+    return;
   }
 
   const token = authorization.replace('Bearer ', '');

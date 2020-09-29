@@ -1,0 +1,15 @@
+module.exports = {
+  ERR_MESSAGE_SERVER_ERR: 'Произошла ошибка на сервере',
+  ERR_MESSAGE_FORBIDDEN: 'Нет прав на удаление',
+  ERR_MESSAGE_PASS_REQUIRE: 'Пароль не задан',
+  ERR_MESSAGE_SPACES_ALLOW: 'Пароль не может состоять только из пробелов',
+  ERR_MESSAGE_PASS_LENGTH: 'Длина пароля должна быть не менее: ',
+  ERR_MESSAGE_USER_EXISTS: 'Пользователь с таким email уже существует',
+  ERR_MESSAGE_USER_NOT_FOUND: 'Пользователь не существует',
+  ERR_MESSAGE_SOURCE_NOT_FOUND: 'Запрашиваемый ресурс не найден',
+  ERR_MESSAGE_AUTH_REQUIRE: 'Требуется авторизация',
+  ERR_MESSAGE_INVALID_USER_DETAILS: 'Некорректные имя пользователя или пароль',
+  ERR_MESSAGE_EMPTY_USER_DETAILS: 'Не задан email или пароль',
+  ERR_MESSAGE_ARTICLE_NOT_FOUND: 'Статья не существует',
+  ERR_MESSAGE_REQ_LIMIT: 'Превышен лимит запросов',
+};
