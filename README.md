@@ -3,7 +3,7 @@ A. Dubovik YPraktikum News explorer (backend)
 ### HTML, CSS, Java Script, server tools and mongoDB in action.
 ### In this project used HTML, CSS, JavaScript, mongoDB, Node.js and Express to develop frontend and backend.
 ### In this part used mongoDB, Node.js and Express to develop backend.
-#### Version 0.0.1
+#### Version 0.0.2
 ## Quick start: 
 #### To clone repository use:
     git clone https://github.com/dubovik02/news-explorer-api
