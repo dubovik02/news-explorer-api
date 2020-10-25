@@ -1,11 +1,17 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const {
-  readArticles, createArticle, deleteArticleById,
+  readArticles, createArticle, deleteArticleById, getUserArticles,
 } = require('../controllers/articles');
 const { checkURL } = require('../common/UrlValidator');
 
 router.get('/', readArticles);
+
+router.get('/:id', celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().alphanum().length(24).hex(),
+  }),
+}), getUserArticles);
 
 router.post('/', celebrate({
   body: Joi.object().keys({

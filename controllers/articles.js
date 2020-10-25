@@ -11,6 +11,14 @@ module.exports.readArticles = (req, res, next) => {
     })
     .catch(next);
 };
+// получение статей текущего пользователя
+module.exports.getUserArticles = (req, res, next) => {
+  Articles.find({ owner: req.params.id }).select('+owner').sort({ date: -1 })
+    .then((articles) => {
+      res.status(200).send(articles);
+    })
+    .catch(next);
+};
 // Создание статьи
 module.exports.createArticle = (req, res, next) => {
   const {
