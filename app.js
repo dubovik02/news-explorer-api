@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
@@ -20,6 +21,19 @@ mongoose.connect(config.CONNECTION_STR, {
   useFindAndModify: false,
   useUnifiedTopology: true,
 });
+
+const corsOptions = {
+  origin: [
+    'https://ne2020.tk',
+    'http://localhost:8080',
+    'https://localhost:8080',
+    'https://dubovik02.github.com',
+    'https://dubovik02.github.io',
+  ],
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+app.use('*', cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
